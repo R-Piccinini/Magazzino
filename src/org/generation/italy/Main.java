@@ -1,10 +1,12 @@
-package org.generation.italy.model;
+package org.generation.italy;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
+
+import org.generation.italy.model.Movimento;
 
 public class Main {
 
