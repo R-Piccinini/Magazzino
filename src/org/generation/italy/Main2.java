@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Scanner;
 
 import org.generation.italy.model.Movimento;
@@ -18,7 +19,7 @@ public class Main2 {
 		Scanner sc = new Scanner(System.in);
 		int giacenza = 0;
 		String risposta;
-		HashMap<Integer, String> fornitori = new HashMap<Integer, String>() { // inizializzazione Hashmaps
+		LinkedHashMap<Integer, String> fornitori = new LinkedHashMap<Integer, String>() { // inizializzazione Hashmaps
 			{
 				put(01, "Microsoft");
 				put(02, "IBM");
@@ -28,7 +29,7 @@ public class Main2 {
 
 			}
 		};
-		HashMap<Integer, String> clienti = new HashMap<Integer, String>() {
+		LinkedHashMap<Integer, String> clienti = new LinkedHashMap<Integer, String>() {
 			{
 				put(01, "Sigma Spa");
 				put(02, "Microtec Srl");
@@ -38,7 +39,7 @@ public class Main2 {
 
 			}
 		};
-		HashMap<Integer, String> prodotti = new HashMap<Integer, String>() {
+		LinkedHashMap<Integer, String> prodotti = new LinkedHashMap<Integer, String>() {
 			{
 				put(01, "Smartphones");
 				put(02, "PC");
@@ -48,7 +49,7 @@ public class Main2 {
 
 			}
 		};
-		HashMap<String, String> tipologieMovimento = new HashMap<String, String>() {
+		LinkedHashMap<String, String> tipologieMovimento = new LinkedHashMap<String, String>() {
 			{
 				put("E01", "acquisto da fornitore");
 				put("E02", "reso da cliente");
@@ -82,22 +83,22 @@ public class Main2 {
 					System.out.println("Inserisci data: ");
 					m.data = LocalDate.parse(sc.nextLine(), df);
 					System.out.println("Inserisci cod. prodotto(01-05):");
-					m.codProdotto = verificaCodice(prodotti,sc,"");
+					m.codProdotto = verificaCodice(prodotti, sc, "");
 					sc.nextLine();
 					System.out.println("inserisci riferimento (E01-04/U01-04)");
-					m.riferimento = sc.nextLine();
+					m.riferimento = verificaCodice2(tipologieMovimento, sc, "");
 					// selezione se entrata o uscita di prodotto
 					if (m.riferimento.equals("E01") || m.riferimento.equals("E02") || m.riferimento.equals("E03")
 							|| m.riferimento.equals("E04") || m.riferimento.equals("E05")) {
 						System.out.println("inserisci cod. fornitore(01-05)");
-						m.codFornitore = sc.nextInt();
+						m.codFornitore = verificaCodice(fornitori, sc, "");
 						System.out.println("Inserisci qnt. prodotto:");
 						m.qntProdotto = sc.nextInt();
 						sc.nextLine();
 
 					} else {
 						System.out.println("inserisci cod. cliente(01-05)");
-						m.codCliente = sc.nextInt();
+						m.codCliente = verificaCodice(clienti, sc, "");
 						System.out.println("Inserisci qnt. prodotto:");
 						m.qntProdotto = sc.nextInt();
 						sc.nextLine();
@@ -166,16 +167,30 @@ public class Main2 {
 
 		System.out.println("Arrivederci");
 		sc.close();
-	}// fine class
-	private static int verificaCodice(HashMap<Integer, String> elencoValori, Scanner sc, String messaggio) {
+	}// fine main2
+
+	private static int verificaCodice(LinkedHashMap<Integer, String> elencoValori, Scanner sc, String messaggio) {
 		int codice;
 		do {
+			System.out.println(elencoValori);
 			System.out.print(messaggio);
-			codice=sc.nextInt();
+			codice = sc.nextInt();
 			if (!elencoValori.containsKey(codice))
 				System.out.println("Codice non valido");
-		} while (!elencoValori.containsKey(codice)); //torno indietro se la chiave non esiste nell'hasmap 
-		System.out.println("Hai selezionato: "+elencoValori.get(codice));
-		return codice;		//dopo aver eseguito le istruzioni restituisco il valore del codice
+		} while (!elencoValori.containsKey(codice)); // torno indietro se la chiave non esiste nell'hasmap
+		System.out.println("Hai selezionato: " + elencoValori.get(codice));
+		return codice; // dopo aver eseguito le istruzioni restituisco il valore del codice
 	}
-}// fine main2
+	private static String verificaCodice2(LinkedHashMap<String, String> elencoValori, Scanner sc, String messaggio) {
+		String codice;
+		do {
+			System.out.println(elencoValori);
+			System.out.print(messaggio);
+			codice = sc.nextLine();
+			if (!elencoValori.containsKey(codice))
+				System.out.println("Codice non valido");
+		} while (!elencoValori.containsKey(codice)); // torno indietro se la chiave non esiste nell'hasmap
+		System.out.println("Hai selezionato: " + elencoValori.get(codice));
+		return codice; // dopo aver eseguito le istruzioni restituisco il valore del codice
+	}
+}// fine class
